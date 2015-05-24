@@ -1,0 +1,9 @@
+node_modules
+public
+.tmp
+.idea
+*.iml
+client/bower_components
+dist
+coverage
+/server/config/local.env.js
