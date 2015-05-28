@@ -60,6 +60,7 @@
     "grunt-protractor-runner": "^1.1.0",
     "grunt-rev": "~0.1.0",
     "grunt-sg-release": "^0.2.4",
+    "grunt-ssh-deploy": "^0.2.7",
     "grunt-svgmin": "~0.4.0",
     "grunt-usemin": "~2.1.1",
     "grunt-wiredep": "~1.8.0",

@@ -19,7 +19,8 @@ module.exports = function (grunt) {
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control',
     sgrelease: 'grunt-sg-release',
-    coveralls: 'grunt-coveralls'
+    coveralls: 'grunt-coveralls',
+    ssh: 'grunt-ssh-deploy'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -27,6 +28,26 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+    environments: {
+      options: {
+        local_path: 'dist',
+        deploy_path: '/home/pi/apps/rpi-feed',
+        debug: true,
+        releases_to_keep: '3'
+      },
+      pi: {
+        options: {
+          host: 'pi1.local',
+          username: 'pi',
+          privateKey: require('fs').readFileSync(process.env.HOME + '/.ssh/id_rsa'),
+          before_deploy: 'cd /home/pi/apps/rpi-feed/current && forever stop "rpi-feed"',
+          after_deploy: 'cd /home/pi/apps/rpi-feed/current && ' +
+          'ln -s /home/pi/apps/rpi-feed/node_modules node_modules && ' +
+            //'npm --production install && ' +
+          'NODE_ENV=production PORT=8080 forever start --uid "rpi-feed" -a server/app.js'
+        }
+      }
+    },
     sg_release: {
       options: {
         skipBowerInstall: true,
