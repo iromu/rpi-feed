@@ -27,7 +27,7 @@
 
   function acquireFromRaspistill(STREAM_FILE) {
 
-    spawn('touch', STREAM_FILE);
+    spawn('touch', [STREAM_FILE]);
 
     var args = ['-w', '640', '-h', '480', '-n', '-o', STREAM_FILE, '-t', '999999999', '-tl', '1000'];
 
