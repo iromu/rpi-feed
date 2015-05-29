@@ -3,6 +3,4 @@ node_js:
   - '0.12'
 before_script:
   - npm install -g bower grunt-cli
-  - npm install -g istanbul
   - bower install
-script: "npm run-script coverage"
