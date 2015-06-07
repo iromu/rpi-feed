@@ -13,11 +13,14 @@
   var sockets = {};
   var notStreaming = true;
   var fs = require('fs');
+  var path = require('path');
 
   var Lock = require('./file.lock.js');
   var streamWatch;
 
-  var STREAM_FILE = '/dev/shm/image_stream.jpg';
+  var STREAM_DIR = '/dev/shm/rpi-feed/';
+  var STREAM_FILENAME = 'image_stream.jpg';
+  var STREAM_FILE = STREAM_DIR + STREAM_FILENAME;
 
   //var forever = require('forever-monitor');
 
@@ -27,9 +30,10 @@
 
   function acquireFromRaspistill(STREAM_FILE) {
 
+    spawn('mkdir', ['-p', path.dirname(STREAM_FILE)]);
     spawn('touch', [STREAM_FILE]);
 
-    var args = ['-w', '640', '-h', '480', '-n', '-o', STREAM_FILE, '-t', '999999999', '-tl', '1000'];
+    var args = ['-w', '640', '-h', '480', '-n', '-o', STREAM_FILE, '-t', '999999999', '-tl', '0'];
 
     proc = spawn('raspistill', args);
 
@@ -59,21 +63,16 @@
 
   var startStreamWatch = function (io) {
     var events = 0;
-    streamWatch = fs.watch(STREAM_FILE, {persistent: false}, function (current, previous) {
-      //console.info('File changed ' + current + ' <- ' + previous);
+    streamWatch = fs.watch(STREAM_DIR, {persistent: false}, function (event, filename) {
+      //console.info(event + ' <- ' + filename);
       events++;
-      if (current === 'change') {
-        var imageName = 'image_stream.jpg?_i=' + picIdx++ + '&_t=' + (Math.random() * 100000);
+      if (event === 'rename' && filename == STREAM_FILENAME) {
+        var imageName = STREAM_FILENAME + '?_i=' + picIdx++ + '&_t=' + (Math.random() * 100000);
         fs.readFile(STREAM_FILE, function (err, data) {
           if (err) throw err;
-          //console.info('liveStream:frame ' + imageName);
           io.sockets.emit('liveStream:frame', {name: imageName, buffer: data});
         });
         io.sockets.emit('liveStream', imageName);
-
-        // FIX for chunked writing and file renaming
-        if (streamWatch)streamWatch.close();
-        startStreamWatch(io);
       }
     });
   };

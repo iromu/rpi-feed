@@ -5,7 +5,7 @@
 [![Dependency Status][dep-image]][dep-url]
 [![Dev Dependency Status][dev-dep-image]][dev-dep-url]
 
-Raspicam nodejs socket.io streamer
+Raspicam nodejs socket.io generic streamer. Optimized read/write operations with memory mapped folder ```/dev/shm/rpi-feed/```
 
 ## Usage
 
