@@ -9,11 +9,13 @@ Raspicam nodejs socket.io generic streamer. Optimized read/write operations with
 
 ## Usage
 
+### Prerequisites
+
+    $ npm install -g bower grunt-cli
+
 ### Building from sources
 Run these commands
 
-      $ npm install -g bower grunt-cli
-    
       $ npm install
     
       $ bower install
@@ -22,6 +24,10 @@ Run these commands
       
 
 ### Deploy to Raspberry Pi
+Install forever 
+
+    $ npm install -g forever
+
 You can deploy with `grunt ssh_deploy:pi` or rolling back with `grunt ssh_rollback:pi`.
 
 For the first cold deploy, you must launch the npm install process, and setup your own 
