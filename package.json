@@ -1,6 +1,6 @@
 {
   "name": "rpi-feed",
-  "version": "0.0.2-SNAPSHOT",
+  "version": "0.0.2",
   "main": "server/app.js",
   "dependencies": {
     "base64-stream": "^0.1.2",
